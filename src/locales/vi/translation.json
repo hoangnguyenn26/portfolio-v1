@@ -1,0 +1,52 @@
+{
+  "nav": {
+    "about": "Giới thiệu",
+    "work": "Dự án",
+    "contact": "Liên hệ"
+  },
+  "hero": {
+    "greeting": "Xin chào, tôi tên là",
+    "name": "Nguyễn Hoàng Nguyên",
+    "title": "Tôi là .NET Developer",
+    "description": "Tôi là một Software Engineer chuyên về .NET, tập trung vào việc xây dựng (và đôi khi thiết kế kiến trúc) các giải pháp số hiệu suất cao, có khả năng mở rộng sử dụng Microsoft stack.",
+    "cta": "Xem hồ sơ của tôi!"
+  },
+  "about": {
+    "title": "Về Tôi",
+    "description": "\tLà sinh viên năm cuối ngành Công nghệ Thông tin tại Học viện Kỹ thuật Mật mã, tôi có khả năng kết nối giữa kiến trúc backend vững chắc và giao diện người dùng thân thiện. Tôi chuyên về phát triển các API RESTful bảo mật, hiệu năng cao với ASP.NET Core và xây dựng ứng dụng di động đa nền tảng bằng .NET MAUI.",
+    "description2": "\tTôi đam mê viết code sạch, thiết kế kiến trúc có khả năng mở rộng và tạo ra các công cụ số hoạt động mượt mà. Kinh nghiệm của tôi trải dài từ thiết kế cơ sở dữ liệu, phát triển API, tích hợp dịch vụ bên thứ ba đến nghiên cứu giao tiếp thời gian thực với SignalR. Tôi sẵn sàng mang kỹ năng và sự cống hiến của mình đến với vị trí lập trình viên đầy thử thách.",
+    "description3": "\tĐây là một số công nghệ tôi đã làm việc gần đây:",
+    "technologies": [
+      "C#",
+      ".NET Core",
+      "ASP.NET Core",
+      ".NET MAUI",
+      "SQL Server",
+      "Clean Architecture",
+      "Git",
+      "SignalR"
+    ]
+  },
+  "featured": {
+    "title": "Một Số Dự Án Tôi Đã Xây Dựng",
+    "viewAll": "Xem Tất Cả Dự Án"
+  },
+  "projects": {
+    "title": "Các Dự Án Đáng Chú Ý Khác",
+    "viewAll": "Xem Tất Cả Dự Án"
+  },
+  "contact": {
+    "title": "Tiếp Theo Là Gì?",
+    "subtitle": "Liên Hệ",
+    "description": "Mặc dù hiện tại tôi không tìm kiếm cơ hội mới nào, nhưng hộp thư của tôi luôn mở. Dù bạn có câu hỏi hay chỉ muốn chào hỏi, tôi sẽ cố gắng hết sức để trả lời bạn!",
+    "cta": "Gửi Lời Chào"
+  },
+  "footer": {
+    "designedBy": "Thiết kế & Xây dựng bởi Brittany Chiang"
+  },
+  "common": {
+    "viewProject": "Xem Dự Án",
+    "viewCode": "Xem Mã",
+    "featured": "Dự Án Nổi Bật"
+  }
+} 
