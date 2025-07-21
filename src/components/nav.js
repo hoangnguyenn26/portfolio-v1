@@ -3,14 +3,12 @@ import { Link } from 'gatsby';
 import PropTypes from 'prop-types';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import styled, { css } from 'styled-components';
-import { useTranslation } from 'react-i18next';
 import { navLinks } from '@config';
 import { loaderDelay } from '@utils';
 import { useScrollDirection, usePrefersReducedMotion } from '@hooks';
 import { Menu } from '@components';
-import { IconLogo, IconHex } from '@components/icons';
+import { IconLogo } from '@components/icons';
 import ThemeToggle from './ThemeToggle';
-import LanguageSwitcher from './LanguageSwitcher';
 
 const StyledHeader = styled.header`
   ${({ theme }) => theme.mixins.flexBetween};
@@ -130,7 +128,7 @@ const StyledLinks = styled.div`
       margin: 0 5px;
       position: relative;
       counter-increment: item 1;
-      font-size: var(--fz-xs);
+      font-size: var(--fz-md); // tăng từ --fz-xs lên --fz-md
 
       a {
         padding: 10px;
@@ -158,7 +156,6 @@ const Nav = ({ isHome }) => {
   const scrollDirection = useScrollDirection('down');
   const [scrolledToTop, setScrolledToTop] = useState(true);
   const prefersReducedMotion = usePrefersReducedMotion();
-  const { t } = useTranslation();
 
   const handleScroll = () => {
     setScrolledToTop(window.pageYOffset < 50);
@@ -186,21 +183,15 @@ const Nav = ({ isHome }) => {
   const fadeDownClass = isHome ? 'fadedown' : '';
 
   const Logo = (
-    <div className="logo" tabIndex="-1">
+    <div className="logo" aria-label="Home Logo">
       {isHome ? (
         <a href="/" aria-label="home">
-          <div className="hex-container">
-            <IconHex />
-          </div>
           <div className="logo-container">
             <IconLogo />
           </div>
         </a>
       ) : (
         <Link to="/" aria-label="home">
-          <div className="hex-container">
-            <IconHex />
-          </div>
           <div className="logo-container">
             <IconLogo />
           </div>
@@ -227,12 +218,11 @@ const Nav = ({ isHome }) => {
                 {navLinks &&
                   navLinks.map(({ url, name }, i) => (
                     <li key={i}>
-                      <Link to={url}>{t(`nav.${name.toLowerCase()}`)}</Link>
+                      <Link to={url}>{name}</Link>
                     </li>
                   ))}
               </ol>
               <div>{ResumeLink}</div>
-              <LanguageSwitcher />
               <ThemeToggle />
             </StyledLinks>
 
@@ -256,7 +246,7 @@ const Nav = ({ isHome }) => {
                     navLinks.map(({ url, name }, i) => (
                       <CSSTransition key={i} classNames={fadeDownClass} timeout={timeout}>
                         <li key={i} style={{ transitionDelay: `${isHome ? i * 100 : 0}ms` }}>
-                          <Link to={url}>{t(`nav.${name.toLowerCase()}`)}</Link>
+                          <Link to={url}>{name}</Link>
                         </li>
                       </CSSTransition>
                     ))}
@@ -272,7 +262,6 @@ const Nav = ({ isHome }) => {
                   </CSSTransition>
                 )}
               </TransitionGroup>
-              <LanguageSwitcher />
               <ThemeToggle />
             </StyledLinks>
 

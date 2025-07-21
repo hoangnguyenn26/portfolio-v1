@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import styled from 'styled-components';
-import { useTranslation } from 'react-i18next';
 import { navDelay, loaderDelay } from '@utils';
 import { usePrefersReducedMotion } from '@hooks';
 
@@ -57,29 +56,25 @@ const StyledHeroSection = styled.section`
 const Hero = () => {
   const [isMounted, setIsMounted] = useState(false);
   const prefersReducedMotion = usePrefersReducedMotion();
-  const { t } = useTranslation();
 
   useEffect(() => {
-    if (prefersReducedMotion) {
-      return;
-    }
-
     const timeout = setTimeout(() => setIsMounted(true), navDelay);
     return () => clearTimeout(timeout);
   }, []);
 
-  const one = <h1>{t('hero.greeting')}</h1>;
-  const two = <h2 className="big-heading name">{t('hero.name')}</h2>;
-  const three = <h3 className="big-heading">{t('hero.title')}</h3>;
+  const one = <h1>Hi, my name is</h1>;
+  const two = <h2 className="big-heading">Nguyễn Hoàng Nguyên.</h2>;
+  const three = <h3 className="big-heading">A .NET Developer.</h3>;
   const four = (
-    <>
-      <p>
-        {t('hero.description')}
-      </p>
-    </>
+    <p>
+      I'm a .NET Software Engineer focused on building (and occasionally architecting)
+      high-performance, scalable digital solutions using the Microsoft stack.
+    </p>
   );
   const five = (
-    <a class="email-link" href="/#about" rel="noopener noreferrer">{t('hero.cta')}</a>
+    <a target="_blank" className="email-link" href="resume.pdf">
+      Check out my Resume
+    </a>
   );
 
   const items = [one, two, three, four, five];
@@ -87,11 +82,7 @@ const Hero = () => {
   return (
     <StyledHeroSection>
       {prefersReducedMotion ? (
-        <>
-          {items.map((item, i) => (
-            <div key={i}>{item}</div>
-          ))}
-        </>
+        <>{isMounted && items.map((item, i) => <div key={i}>{item}</div>)}</>
       ) : (
         <TransitionGroup component={null}>
           {isMounted &&

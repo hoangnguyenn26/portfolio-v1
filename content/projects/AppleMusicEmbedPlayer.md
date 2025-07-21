@@ -1,14 +1,15 @@
 ---
-date: '2017-12-01'
-title: 'Apple Music Embeddable Web Player Widget'
-github: ''
-external: 'https://tools.applemusic.com/en-us'
+date: '2023-12-01'
+title: 'A blog with PHP'
+github: 'https://github.com/TrongPhuc22153/doanWeb'
+external: 'https://github.com/TrongPhuc22153/doanWeb'
 tech:
-  - MusicKit.js
+  - PHP
   - JS
   - SCSS
-company: 'Apple'
+  - NodeJS
+company: 'Group'
 showInProjects: true
 ---
 
-Embeddable web player widget for Apple Music that lets users log in and listen to full song playback in the browser leveraging [MusicKit.js](https://developer.apple.com/documentation/musickitjs). Read more about this project on [9to5Mac](https://9to5mac.com/2018/06/03/apple-music-embeddable-web-player-listen-browser/).
+Group project focuses on building a blog platform using PHP, featuring functionalities such as post viewing, article publishing, and content management.

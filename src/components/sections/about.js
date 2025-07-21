@@ -1,7 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { StaticImage } from 'gatsby-plugin-image';
 import styled from 'styled-components';
-import { useTranslation } from 'react-i18next';
 import { srConfig } from '@config';
 import sr from '@utils/sr';
 import { usePrefersReducedMotion } from '@hooks';
@@ -11,14 +9,17 @@ const StyledAboutSection = styled.section`
 
   .inner {
     display: grid;
-    grid-template-columns: 3fr 2fr;
-    grid-gap: 50px;
+    grid-template-columns: 2fr 1fr;
+    grid-gap: 80px;
+    align-items: start;
 
     @media (max-width: 768px) {
       display: block;
+      grid-gap: 50px;
     }
   }
 `;
+
 const StyledText = styled.div`
   ul.skills-list {
     display: grid;
@@ -47,9 +48,11 @@ const StyledText = styled.div`
     }
   }
 `;
+
 const StyledPic = styled.div`
   position: relative;
   max-width: 300px;
+  margin-top: 20px;
 
   @media (max-width: 768px) {
     margin: 50px auto 0;
@@ -62,6 +65,7 @@ const StyledPic = styled.div`
     position: relative;
     width: 100%;
     border-radius: var(--border-radius);
+    background-color: var(--green);
 
     &:hover,
     &:focus {
@@ -77,9 +81,10 @@ const StyledPic = styled.div`
       position: relative;
       border-radius: var(--border-radius);
       transition: var(--transition);
+      width: 100%;
+      height: auto;
     }
 
-    &:before,
     &:after {
       content: '';
       display: block;
@@ -88,14 +93,6 @@ const StyledPic = styled.div`
       height: 100%;
       border-radius: var(--border-radius);
       transition: var(--transition);
-    }
-
-    &:before {
-      top: 0;
-      left: 0;
-    }
-
-    &:after {
       border: 2px solid var(--green);
       top: 14px;
       left: 14px;
@@ -107,7 +104,6 @@ const StyledPic = styled.div`
 const About = () => {
   const revealContainer = useRef(null);
   const prefersReducedMotion = usePrefersReducedMotion();
-  const { t } = useTranslation();
 
   useEffect(() => {
     if (prefersReducedMotion) {
@@ -117,26 +113,39 @@ const About = () => {
     sr.reveal(revealContainer.current, srConfig());
   }, []);
 
-  const skills = t('about.technologies', { returnObjects: true });
+  const skills = [
+    'C#',
+    '.NET Core',
+    'ASP.NET Core',
+    '.NET MAUI',
+    'SQL Server',
+    'Clean Architecture',
+    'Git',
+    'SignalR',
+  ];
 
   return (
     <StyledAboutSection id="about" ref={revealContainer}>
-      <h2 className="numbered-heading">{t('about.title')}</h2>
+      <h2 className="numbered-heading">About Me</h2>
 
       <div className="inner">
         <StyledText>
           <div>
             <p>
-              {t('about.description')}
+              As a final-year Information Technology student at the Academy of Cryptography
+              Techniques, I bridge the gap between strong backend architecture and intuitive user
+              interfaces. I specialize in crafting secure, high-performance RESTful APIs with
+              ASP.NET Core and building cross-platform mobile apps with .NET MAUI.
             </p>
 
             <p>
-              {t('about.description2')}
+              I'm passionate about clean code, scalable architecture, and creating digital tools
+              that work flawlessly. My experience spans from database design and API development to
+              integrating third-party services and exploring real-time communication with SignalR.
+              I'm ready to bring my skills and dedication to a challenging developer role.
             </p>
 
-            <p>
-              {t('about.description3')}
-            </p>
+            <p>Here are a few technologies I've been working with recently:</p>
           </div>
 
           <ul className="skills-list">
@@ -146,14 +155,7 @@ const About = () => {
 
         <StyledPic>
           <div className="wrapper">
-            <StaticImage
-              className="img"
-              src="../../images/me.jpg"
-              width={500}
-              quality={95}
-              formats={['AUTO', 'WEBP', 'AVIF']}
-              alt="Headshot"
-            />
+            <img src="/me.jpg" alt="Headshot" className="img" />
           </div>
         </StyledPic>
       </div>

@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
 import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 import styled from 'styled-components';
-import { useTranslation } from 'react-i18next';
 import sr from '@utils/sr';
 import { srConfig } from '@config';
 import { Icon } from '@components/icons';
@@ -96,6 +95,10 @@ const StyledProject = styled.li`
     position: relative;
     grid-column: 1 / 7;
     grid-row: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 2;
 
     @media (max-width: 1080px) {
       grid-column: 1 / 9;
@@ -153,7 +156,6 @@ const StyledProject = styled.li`
   }
 
   .project-description {
-    ${({ theme }) => theme.mixins.boxShadow};
     position: relative;
     z-index: 2;
     padding: 25px;
@@ -161,11 +163,14 @@ const StyledProject = styled.li`
     background-color: var(--light-navy);
     color: var(--light-slate);
     font-size: var(--fz-lg);
+    margin-bottom: 20px;
+    flex-grow: 1;
 
     @media (max-width: 768px) {
       padding: 20px 0;
       background-color: transparent;
       box-shadow: none;
+      margin-bottom: 10px;
 
       &:hover {
         box-shadow: none;
@@ -186,8 +191,8 @@ const StyledProject = styled.li`
     display: flex;
     flex-wrap: wrap;
     position: relative;
-    z-index: 2;
-    margin: 25px 0 10px;
+    z-index: 3;
+    margin: 0 0 20px 0;
     padding: 0;
     list-style: none;
 
@@ -200,13 +205,17 @@ const StyledProject = styled.li`
     }
 
     @media (max-width: 768px) {
-      margin: 10px 0;
+      margin: 0 0 15px 0;
 
       li {
         margin: 0 10px 5px 0;
         color: var(--lightest-slate);
       }
     }
+  }
+
+  &:nth-of-type(2n + 1) .project-tech-list {
+    margin-left: 40px;
   }
 
   .project-links {
@@ -216,6 +225,7 @@ const StyledProject = styled.li`
     margin-top: 10px;
     margin-left: -10px;
     color: var(--lightest-slate);
+    z-index: 3;
 
     a {
       ${({ theme }) => theme.mixins.flexCenter};
@@ -234,19 +244,15 @@ const StyledProject = styled.li`
         height: 20px;
       }
     }
-
-    .cta {
-      ${({ theme }) => theme.mixins.smallButton};
-      margin: 10px;
-    }
   }
 
   .project-image {
-    ${({ theme }) => theme.mixins.boxShadow};
+    ${({ theme }) => theme.mixins.boxShadow}
     grid-column: 6 / -1;
     grid-row: 1 / -1;
     position: relative;
     z-index: 1;
+    height: 100%;
 
     @media (max-width: 768px) {
       grid-column: 1 / -1;
@@ -260,6 +266,7 @@ const StyledProject = styled.li`
       background-color: transparent;
       border-radius: var(--border-radius);
       vertical-align: middle;
+      display: block;
 
       &:hover,
       &:focus {
@@ -282,7 +289,7 @@ const StyledProject = styled.li`
         left: 0;
         right: 0;
         bottom: 0;
-        z-index: 3;
+        z-index: 1;
         transition: var(--transition);
       }
     }
@@ -290,7 +297,10 @@ const StyledProject = styled.li`
     .img {
       border-radius: var(--border-radius);
       position: relative;
-      z-index: -1;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
 
       @media (max-width: 768px) {
         height: 100%;
@@ -310,7 +320,7 @@ const Featured = () => {
     {
       featured: allMarkdownRemark(
         filter: { fileAbsolutePath: { regex: "/content/featured/" } }
-        sort: { fields: [frontmatter___date], order: ASC }
+        sort: { frontmatter: { date: ASC } }
       ) {
         edges {
           node {
@@ -324,7 +334,6 @@ const Featured = () => {
               tech
               github
               external
-              cta
             }
             html
           }
@@ -337,7 +346,6 @@ const Featured = () => {
   const revealTitle = useRef(null);
   const revealProjects = useRef([]);
   const prefersReducedMotion = usePrefersReducedMotion();
-  const { t } = useTranslation();
 
   useEffect(() => {
     if (prefersReducedMotion) {
@@ -351,21 +359,21 @@ const Featured = () => {
   return (
     <section id="projects">
       <h2 className="numbered-heading" ref={revealTitle}>
-        {t('featured.title')}
+        Some Things I've Built
       </h2>
 
       <StyledProjectsGrid>
         {featuredProjects &&
           featuredProjects.map(({ node }, i) => {
             const { frontmatter, html } = node;
-            const { external, title, tech, github, cover, cta } = frontmatter;
+            const { external, title, tech, github, cover } = frontmatter;
             const image = getImage(cover);
 
             return (
               <StyledProject key={i} ref={el => (revealProjects.current[i] = el)}>
                 <div className="project-content">
                   <div>
-                    <p className="project-overline">{t('common.featured')}</p>
+                    <p className="project-overline">Featured Project</p>
 
                     <h3 className="project-title">
                       <a href={external}>{title}</a>
@@ -385,17 +393,12 @@ const Featured = () => {
                     )}
 
                     <div className="project-links">
-                      {cta && (
-                        <a href={cta} aria-label="Course Link" className="cta">
-                          Learn More
-                        </a>
-                      )}
                       {github && (
                         <a href={github} aria-label="GitHub Link">
                           <Icon name="GitHub" />
                         </a>
                       )}
-                      {external && !cta && (
+                      {external && (
                         <a href={external} aria-label="External Link" className="external">
                           <Icon name="External" />
                         </a>

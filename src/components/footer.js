@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import styled from 'styled-components';
-import { useTranslation } from 'react-i18next';
 import { Icon } from '@components/icons';
-import { socialMedia } from '@config';
 
 const StyledFooter = styled.footer`
   ${({ theme }) => theme.mixins.flexCenter};
@@ -68,68 +65,102 @@ const StyledCredit = styled.div`
   }
 `;
 
-const Footer = () => {
-  const [githubInfo, setGitHubInfo] = useState({
-    stars: null,
-    forks: null,
-  });
-  const { t } = useTranslation();
+const StyledScrollToTopButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  margin-bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background 0.2s;
+  outline: none;
 
-  useEffect(() => {
-    if (process.env.NODE_ENV !== 'production') {
-      return;
+  svg {
+    stroke: #111;
+    fill: none !important;
+    transition: stroke 0.2s;
+  }
+  svg polyline {
+    fill: none !important;
+  }
+  [data-theme='dark'] & svg {
+    stroke: #fff;
+  }
+  &:hover svg,
+  &:focus svg {
+    stroke: var(--lightest-slate);
+  }
+`;
+
+const ScrollToTopButton = () => {
+  const handleScrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleKeyDown = event => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      handleScrollToTop();
     }
-    fetch('https://api.github.com/repos/bchiang7/v4')
-      .then(response => response.json())
-      .then(json => {
-        const { stargazers_count, forks_count } = json;
-        setGitHubInfo({
-          stars: stargazers_count,
-          forks: forks_count,
-        });
-      })
-      .catch(e => console.error(e));
-  }, []);
+  };
 
   return (
-    <StyledFooter>
-      <StyledSocialLinks>
-        <ul>
-          {socialMedia &&
-            socialMedia.map(({ name, url }, i) => (
-              <li key={i}>
-                <a href={url} aria-label={name}>
-                  <Icon name={name} />
-                </a>
-              </li>
-            ))}
-        </ul>
-      </StyledSocialLinks>
-
-      <StyledCredit tabindex="-1">
-        <a href="https://github.com/bchiang7/v4">
-          <div>{t('footer.designedBy')}</div>
-
-          {githubInfo.stars && githubInfo.forks && (
-            <div className="github-stats">
-              <span>
-                <Icon name="Star" />
-                <span>{githubInfo.stars.toLocaleString()}</span>
-              </span>
-              <span>
-                <Icon name="Fork" />
-                <span>{githubInfo.forks.toLocaleString()}</span>
-              </span>
-            </div>
-          )}
-        </a>
-      </StyledCredit>
-    </StyledFooter>
+    <StyledScrollToTopButton
+      onClick={handleScrollToTop}
+      aria-label="Scroll to top"
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+      className="scroll-to-top-btn">
+      <svg
+        width="28"
+        height="28"
+        viewBox="0 0 24 24"
+        fill="none"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true">
+        <polyline points="6 15 12 9 18 15" />
+      </svg>
+    </StyledScrollToTopButton>
   );
 };
 
-Footer.propTypes = {
-  githubInfo: PropTypes.object,
+const Footer = () => {
+  const gitHubUrl = 'https://github.com/hoangnguyenn26';
+  const repoUrl = 'https://github.com/hoangnguyenn26/portfolio-v1';
+
+  return (
+    <StyledFooter>
+      <ScrollToTopButton />
+      <StyledSocialLinks>
+        <ul>
+          <li>
+            <a href={gitHubUrl} aria-label="GitHub">
+              <Icon name="GitHub" />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.instagram.com/hgnguyen.26/" aria-label="Instagram">
+              <Icon name="Instagram" />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/in/hoang-nguyenn/" aria-label="LinkedIn">
+              <Icon name="LinkedIn" />
+            </a>
+          </li>
+        </ul>
+      </StyledSocialLinks>
+      <StyledCredit tabindex="-1">
+        <div>
+          <a href={repoUrl}>Hoang Nguyen</a>
+        </div>
+      </StyledCredit>
+    </StyledFooter>
+  );
 };
 
 export default Footer;

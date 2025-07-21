@@ -174,10 +174,11 @@ const GlobalStyle = createGlobalStyle`
     width: 100%;
     font-size: clamp(26px, 5vw, var(--fz-heading));
     white-space: nowrap;
+    line-height: 1;
 
     &:before {
       position: relative;
-      bottom: 4px;
+      bottom: 0;
       counter-increment: section;
       content: '0' counter(section) '.';
       margin-right: 10px;
@@ -185,9 +186,10 @@ const GlobalStyle = createGlobalStyle`
       font-family: var(--font-mono);
       font-size: clamp(var(--fz-md), 3vw, var(--fz-xl));
       font-weight: 400;
+      line-height: 1;
 
       @media (max-width: 480px) {
-        margin-bottom: -3px;
+        margin-bottom: 0;
         margin-right: 5px;
       }
     }
@@ -196,7 +198,7 @@ const GlobalStyle = createGlobalStyle`
       content: '';
       display: block;
       position: relative;
-      top: -5px;
+      top: 0;
       width: 300px;
       height: 1px;
       margin-left: 20px;

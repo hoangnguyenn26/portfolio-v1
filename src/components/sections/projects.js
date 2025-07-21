@@ -1,46 +1,32 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Link, useStaticQuery, graphql } from 'gatsby';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import React, { useEffect, useRef } from 'react';
+import { useStaticQuery, graphql } from 'gatsby';
 import styled from 'styled-components';
-import { useTranslation } from 'react-i18next';
-import { srConfig } from '@config';
 import sr from '@utils/sr';
+import { srConfig } from '@config';
 import { Icon } from '@components/icons';
 import { usePrefersReducedMotion } from '@hooks';
 
-const StyledProjectsSection = styled.section`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+const StyledProjectsGrid = styled.ul`
+  ${({ theme }) => theme.mixins.resetList};
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 15px;
+  position: relative;
+  margin-top: 50px;
 
-  h2 {
-    font-size: clamp(24px, 5vw, var(--fz-heading));
+  @media (max-width: 1080px) {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   }
 
-  .archive-link {
-    font-family: var(--font-mono);
-    font-size: var(--fz-sm);
-    &:after {
-      bottom: 0.1em;
-    }
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin-top: 30px;
   }
 
-  .projects-grid {
-    ${({ theme }) => theme.mixins.resetList};
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    grid-gap: 15px;
-    position: relative;
-    margin-top: 50px;
-
-    @media (max-width: 1080px) {
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    }
-  }
-
-  .more-button {
-    ${({ theme }) => theme.mixins.button};
-    margin: 80px auto 0;
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    gap: 15px;
   }
 `;
 
@@ -74,12 +60,12 @@ const StyledProject = styled.li`
     border-radius: var(--border-radius);
     background-color: var(--light-navy);
     transition: var(--transition);
-    overflow: auto;
   }
 
   .project-top {
     ${({ theme }) => theme.mixins.flexBetween};
     margin-bottom: 35px;
+    width: 100%;
 
     .folder {
       color: var(--green);
@@ -143,6 +129,11 @@ const StyledProject = styled.li`
     a {
       ${({ theme }) => theme.mixins.inlineLink};
     }
+
+    strong {
+      color: var(--white);
+      font-weight: normal;
+    }
   }
 
   .project-tech-list {
@@ -166,20 +157,88 @@ const StyledProject = styled.li`
   }
 `;
 
+const StyledSectionHeading = styled.h2`
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin: 10px 0 40px;
+  width: 100%;
+  font-size: clamp(26px, 5vw, var(--fz-heading));
+  white-space: nowrap;
+  color: var(--lightest-slate);
+  text-align: center;
+  justify-content: center;
+
+  /* Xoá line after */
+  &::after {
+    display: none;
+  }
+
+  @media (max-width: 1080px) {
+    width: 100%;
+    &::after {
+      width: 200px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    &::after {
+      width: 100px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    &::after {
+      display: none;
+    }
+  }
+`;
+
+const StyledMoreButton = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 80px;
+
+  .show-more-button {
+    ${({ theme }) => theme.mixins.button};
+    font-size: var(--fz-sm);
+    font-family: var(--font-mono);
+    color: var(--green);
+    background-color: transparent;
+    border: 1px solid var(--green);
+    border-radius: var(--border-radius);
+    padding: 1rem 2rem;
+    cursor: pointer;
+    transition: var(--transition);
+
+    &:hover,
+    &:focus {
+      background-color: rgba(100, 255, 138, 0.1);
+      outline: 0;
+    }
+  }
+`;
+
 const Projects = () => {
   const data = useStaticQuery(graphql`
-    query {
+    {
       projects: allMarkdownRemark(
         filter: {
           fileAbsolutePath: { regex: "/content/projects/" }
           frontmatter: { showInProjects: { ne: false } }
         }
-        sort: { fields: [frontmatter___date], order: DESC }
+        sort: { frontmatter: { date: DESC } }
       ) {
         edges {
           node {
             frontmatter {
               title
+              cover {
+                childImageSharp {
+                  gatsbyImageData(width: 700, placeholder: BLURRED, formats: [AUTO, WEBP, AVIF])
+                }
+              }
               tech
               github
               external
@@ -191,12 +250,13 @@ const Projects = () => {
     }
   `);
 
-  const [showMore, setShowMore] = useState(false);
+  const projects = data.projects.edges.filter(({ node }) => node);
+  const [showAll, setShowAll] = React.useState(false);
   const revealTitle = useRef(null);
-  const revealArchiveLink = useRef(null);
   const revealProjects = useRef([]);
   const prefersReducedMotion = usePrefersReducedMotion();
-  const { t } = useTranslation();
+
+  const displayedProjects = showAll ? projects : projects.slice(0, 6);
 
   useEffect(() => {
     if (prefersReducedMotion) {
@@ -204,110 +264,71 @@ const Projects = () => {
     }
 
     sr.reveal(revealTitle.current, srConfig());
-    sr.reveal(revealArchiveLink.current, srConfig());
     revealProjects.current.forEach((ref, i) => sr.reveal(ref, srConfig(i * 100)));
   }, []);
 
-  const GRID_LIMIT = 6;
-  const projects = data.projects.edges.filter(({ node }) => node);
-  const firstSix = projects.slice(0, GRID_LIMIT);
-  const projectsToShow = showMore ? projects : firstSix;
-
-  const projectInner = node => {
-    const { frontmatter, html } = node;
-    const { github, external, title, tech } = frontmatter;
-
-    return (
-      <div className="project-inner">
-        <header>
-          <div className="project-top">
-            <div className="folder">
-              <Icon name="Folder" />
-            </div>
-            <div className="project-links">
-              {github && (
-                <a href={github} aria-label="GitHub Link" target="_blank" rel="noreferrer">
-                  <Icon name="GitHub" />
-                </a>
-              )}
-              {external && (
-                <a
-                  href={external}
-                  aria-label="External Link"
-                  className="external"
-                  target="_blank"
-                  rel="noreferrer">
-                  <Icon name="External" />
-                </a>
-              )}
-            </div>
-          </div>
-
-          <h3 className="project-title">
-            <a href={external} target="_blank" rel="noreferrer">
-              {title}
-            </a>
-          </h3>
-
-          <div className="project-description" dangerouslySetInnerHTML={{ __html: html }} />
-        </header>
-
-        <footer>
-          {tech && (
-            <ul className="project-tech-list">
-              {tech.map((tech, i) => (
-                <li key={i}>{tech}</li>
-              ))}
-            </ul>
-          )}
-        </footer>
-      </div>
-    );
-  };
-
   return (
-    <StyledProjectsSection>
-      <h2 ref={revealTitle}>{t('projects.title')}</h2>
+    <section id="projects">
+      <StyledSectionHeading ref={revealTitle}>Other Noteworthy Projects</StyledSectionHeading>
 
-      <Link className="inline-link archive-link" to="/archive" ref={revealArchiveLink}>
-        {t('projects.viewAll')}
-      </Link>
+      <StyledProjectsGrid>
+        {displayedProjects &&
+          displayedProjects.map(({ node }, i) => {
+            const { frontmatter, html } = node;
+            const { external, title, tech, github } = frontmatter;
 
-      <ul className="projects-grid">
-        {prefersReducedMotion ? (
-          <>
-            {projectsToShow &&
-              projectsToShow.map(({ node }, i) => (
-                <StyledProject key={i}>{projectInner(node)}</StyledProject>
-              ))}
-          </>
-        ) : (
-          <TransitionGroup component={null}>
-            {projectsToShow &&
-              projectsToShow.map(({ node }, i) => (
-                <CSSTransition
-                  key={i}
-                  classNames="fadeup"
-                  timeout={i >= GRID_LIMIT ? (i - GRID_LIMIT) * 300 : 300}
-                  exit={false}>
-                  <StyledProject
-                    key={i}
-                    ref={el => (revealProjects.current[i] = el)}
-                    style={{
-                      transitionDelay: `${i >= GRID_LIMIT ? (i - GRID_LIMIT) * 100 : 0}ms`,
-                    }}>
-                    {projectInner(node)}
-                  </StyledProject>
-                </CSSTransition>
-              ))}
-          </TransitionGroup>
-        )}
-      </ul>
+            return (
+              <StyledProject key={i} ref={el => (revealProjects.current[i] = el)}>
+                <div className="project-inner">
+                  <header>
+                    <div className="project-top">
+                      <div className="folder">
+                        <Icon name="Folder" />
+                      </div>
+                      <div className="project-links">
+                        {github && (
+                          <a href={github} aria-label="GitHub Link">
+                            <Icon name="GitHub" />
+                          </a>
+                        )}
+                        {external && (
+                          <a href={external} aria-label="External Link" className="external">
+                            <Icon name="External" />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                    <h3 className="project-title">
+                      <a href={external}>{title}</a>
+                    </h3>
+                    <div
+                      className="project-description"
+                      dangerouslySetInnerHTML={{ __html: html }}
+                    />
+                  </header>
+                  <footer>
+                    {tech.length && (
+                      <ul className="project-tech-list">
+                        {tech.map((tech, i) => (
+                          <li key={i}>{tech}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </footer>
+                </div>
+              </StyledProject>
+            );
+          })}
+      </StyledProjectsGrid>
 
-      <button className="more-button" onClick={() => setShowMore(!showMore)}>
-        Show {showMore ? 'Less' : 'More'}
-      </button>
-    </StyledProjectsSection>
+      {projects.length > 6 && (
+        <StyledMoreButton>
+          <button className="show-more-button" onClick={() => setShowAll(!showAll)}>
+            {showAll ? 'Show Less' : 'Show More'}
+          </button>
+        </StyledMoreButton>
+      )}
+    </section>
   );
 };
 

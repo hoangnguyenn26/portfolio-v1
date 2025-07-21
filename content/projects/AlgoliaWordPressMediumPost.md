@@ -1,14 +1,13 @@
 ---
-date: '2020-03-27'
-title: 'Integrating Algolia Search with WordPress Multisite'
-github: ''
-external: 'https://medium.com/stories-from-upstatement/integrating-algolia-search-with-wordpress-multisite-e2dea3ed449c'
+date: '2024-05-27'
+title: 'Simple chat app with WebSocket'
+github: 'https://github.com/hoangnguyenn26/SimplyChatAppSocket'
+external: 'https://github.com/hoangnguyenn26/SimplyChatAppSocket'
 tech:
-  - Algolia
-  - WordPress
-  - PHP
-company: 'Upstatement'
+  - Websocket
+  - Javascripts
+company: 'Personal'
 showInProjects: true
 ---
 
-Building a custom multisite compatible WordPress plugin to build global search with Algolia
+A simple real-time chat app allows users to communicate with each other instantly and seamlessly.

@@ -18,11 +18,19 @@ const variables = css`
     --pink: #ffc0cb;
     --blue: #0000ff;
 
-    --spotlight-color: radial-gradient(circle, rgba(0, 100, 0, 0.25) 0%, rgba(0, 100, 0, 0.1) 40%, rgba(0, 100, 0, 0.1) 70%, transparent 100%);
+    --spotlight-color: radial-gradient(
+      circle,
+      rgba(0, 100, 0, 0.25) 0%,
+      rgba(0, 100, 0, 0.1) 40%,
+      rgba(0, 100, 0, 0.1) 70%,
+      transparent 100%
+    );
     --spotlight-blend-mode: normal;
 
-    --font-sans: 'Montserrat', sans-serif;
-    --font-mono: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
+    --font-sans: 'Calibre', 'Inter', 'San Francisco', 'SF Pro Text', -apple-system, system-ui,
+      sans-serif;
+    --font-mono: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', 'Consolas', 'Monaco',
+      'Courier New', monospace;
 
     --fz-xxs: 12px;
     --fz-xs: 13px;
@@ -68,7 +76,13 @@ const variables = css`
     --pink: #f57dff;
     --blue: #57cbff;
 
-    --spotlight-color: radial-gradient(circle, rgba(56,189,248,0.25) 0%, rgba(56,189,248,0.15) 40%, rgba(56,189,248,0.05) 70%, transparent 100%);
+    --spotlight-color: radial-gradient(
+      circle,
+      rgba(56, 189, 248, 0.25) 0%,
+      rgba(56, 189, 248, 0.15) 40%,
+      rgba(56, 189, 248, 0.05) 70%,
+      transparent 100%
+    );
     --spotlight-blend-mode: lighten;
   }
 `;

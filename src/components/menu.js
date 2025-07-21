@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Helmet } from 'react-helmet';
 import { Link } from 'gatsby';
+import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
-import { useTranslation } from 'react-i18next';
 import { navLinks } from '@config';
-import { KEY_CODES } from '@utils';
 import { useOnClickOutside } from '@hooks';
+import { BlurOverlay } from '@components';
+import { KEY_CODES } from '@utils';
 import ThemeToggle from './ThemeToggle';
-import LanguageSwitcher from './LanguageSwitcher';
-import BlurOverlay from './BlurOverlay';
 
 const StyledMenu = styled.div`
   display: none;
@@ -46,45 +44,46 @@ const StyledHamburgerButton = styled.button`
   .ham-box-inner {
     position: absolute;
     top: 50%;
-    right: 0;
+    right: 0px;
     width: var(--hamburger-width);
     height: 2px;
     border-radius: var(--border-radius);
-    background-color: var(--green);
+    background-color: var(--lightest-slate);
     transition-duration: 0.22s;
     transition-property: transform;
     transition-delay: ${props => (props.menuOpen ? `0.12s` : `0s`)};
     transform: rotate(${props => (props.menuOpen ? `225deg` : `0deg`)});
-    transition-timing-function: cubic-bezier(
-      ${props => (props.menuOpen ? `0.215, 0.61, 0.355, 1` : `0.55, 0.055, 0.675, 0.19`)}
-    );
+    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+
     &:before,
     &:after {
       content: '';
       display: block;
       position: absolute;
       left: auto;
-      right: 0;
+      right: 0px;
       width: var(--hamburger-width);
       height: 2px;
       border-radius: 4px;
-      background-color: var(--green);
+      background-color: var(--lightest-slate);
       transition-timing-function: ease;
       transition-duration: 0.15s;
       transition-property: transform;
     }
+
     &:before {
       width: ${props => (props.menuOpen ? `100%` : `120%`)};
       top: ${props => (props.menuOpen ? `0` : `-10px`)};
-      opacity: ${props => (props.menuOpen ? 0 : 1)};
-      transition: ${({ menuOpen }) =>
-    menuOpen ? 'var(--ham-before-active)' : 'var(--ham-before)'};
+      opacity: ${props => (props.menuOpen ? 1 : 1)};
+      transition: ${props => (props.menuOpen ? 'var(--ham-before-active)' : 'var(--ham-before)')};
+      transform: ${props => (props.menuOpen ? `rotate(90deg)` : `rotate(0deg)`)};
     }
+
     &:after {
       width: ${props => (props.menuOpen ? `100%` : `80%`)};
       bottom: ${props => (props.menuOpen ? `0` : `-10px`)};
-      transform: rotate(${props => (props.menuOpen ? `-90deg` : `0`)});
-      transition: ${({ menuOpen }) => (menuOpen ? 'var(--ham-after-active)' : 'var(--ham-after)')};
+      transform: ${props => (props.menuOpen ? `rotate(90deg)` : `rotate(0deg)`)};
+      transition: ${props => (props.menuOpen ? 'var(--ham-after-active)' : 'var(--ham-after)')};
     }
   }
 `;
@@ -167,36 +166,6 @@ const StyledSidebar = styled.aside`
     width: 100%;
   }
 
-  .language-switcher-mobile {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 0 auto;
-
-    button {
-      background: transparent;
-      border: 1px solid var(--green);
-      color: var(--green);
-      padding: 10px 15px;
-      border-radius: 4px;
-      font-family: var(--font-mono);
-      font-size: var(--fz-sm);
-      cursor: pointer;
-      transition: all 0.2s ease;
-      opacity: ${props => props.active ? 1 : 0.6};
-
-      &:hover {
-        background: rgba(100, 255, 218, 0.1);
-        opacity: 1;
-      }
-
-      &:focus {
-        outline: none;
-        box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.3);
-      }
-    }
-  }
-
   button {
     margin-top: 20px;
   }
@@ -204,14 +173,8 @@ const StyledSidebar = styled.aside`
 
 const Menu = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { t, i18n } = useTranslation();
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
-
-  const handleLanguageChange = (language) => {
-    i18n.changeLanguage(language);
-    setMenuOpen(false);
-  };
 
   const buttonRef = useRef(null);
   const navRef = useRef(null);
@@ -314,7 +277,7 @@ const Menu = () => {
                 {navLinks.map(({ url, name }, i) => (
                   <li key={i}>
                     <Link to={url} onClick={() => setMenuOpen(false)}>
-                      {t(`nav.${name.toLowerCase()}`)}
+                      {name}
                     </Link>
                   </li>
                 ))}
@@ -326,22 +289,6 @@ const Menu = () => {
             </a>
 
             <div className="mobile-controls">
-              <div className="language-switcher-mobile">
-                <button
-                  active={i18n.language === 'en'}
-                  onClick={() => handleLanguageChange('en')}
-                  aria-label="Switch to English"
-                >
-                  EN
-                </button>
-                <button
-                  active={i18n.language === 'vi'}
-                  onClick={() => handleLanguageChange('vi')}
-                  aria-label="Chuyển sang tiếng Việt"
-                >
-                  VI
-                </button>
-              </div>
               <ThemeToggle />
             </div>
           </nav>

@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { useTranslation } from 'react-i18next';
-import { srConfig, email } from '@config';
+import { srConfig } from '@config';
 import sr from '@utils/sr';
 import { usePrefersReducedMotion } from '@hooks';
 
@@ -14,26 +13,27 @@ const StyledContactSection = styled.section`
     margin: 0 auto 50px;
   }
 
-  .overline {
+  .section-label {
     display: block;
     margin-bottom: 20px;
     color: var(--green);
     font-family: var(--font-mono);
-    font-size: var(--fz-md);
+    font-size: clamp(20px, 3vw, 28px);
     font-weight: 400;
-
-    &:before {
-      bottom: 0;
-      font-size: var(--fz-sm);
-    }
-
-    &:after {
-      display: none;
-    }
+    letter-spacing: 0.1em;
   }
 
   .title {
     font-size: clamp(40px, 5vw, 60px);
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  .description {
+    color: var(--light-slate);
+    font-size: var(--fz-xl);
+    margin-bottom: 40px;
+    line-height: 1.5;
   }
 
   .email-link {
@@ -45,7 +45,6 @@ const StyledContactSection = styled.section`
 const Contact = () => {
   const revealContainer = useRef(null);
   const prefersReducedMotion = usePrefersReducedMotion();
-  const { t } = useTranslation();
 
   useEffect(() => {
     if (prefersReducedMotion) {
@@ -57,16 +56,23 @@ const Contact = () => {
 
   return (
     <StyledContactSection id="contact" ref={revealContainer}>
-      <h2 className="numbered-heading overline">{t('contact.title')}</h2>
-
-      <h2 className="title">{t('contact.subtitle')}</h2>
-
-      <p>
-        {t('contact.description')}
+      <span className="section-label">03. Contact Me</span>
+      <h2 className="title">Get In Touch</h2>
+      <p className="description">
+        I thrive on building full-stack applications from the ground up, and I'm always excited to
+        dive into new technologies like ASP.NET Core, Angular, and cloud services. I am a quick
+        learner, highly motivated, and passionate about writing clean, efficient code.
       </p>
-
-      <a className="email-link" href={`mailto:${email}`}>
-        {t('contact.cta')}
+      <p>
+        I'm actively seeking new opportunities to apply and expand my skills. Feel free to review my
+        projects on GitHub or reach out to discuss a potential collaboration.
+      </p>
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        className="email-link"
+        href="https://mail.google.com/mail/u/0/?fs=1&to=hoangnguyenn268@gmail.com&tf=cm">
+        Send an Email
       </a>
     </StyledContactSection>
   );

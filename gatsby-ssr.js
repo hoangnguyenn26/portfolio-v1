@@ -33,15 +33,13 @@ const Script = () => {
       }
     })();
   `;
-  return <script dangerouslySetInnerHTML={{ __html: code }} />;
+  return <script key="theme-script" dangerouslySetInnerHTML={{ __html: code }} />;
 };
 
 export const onRenderBody = ({ setPreBodyComponents }) => {
   setPreBodyComponents(<Script />);
 };
 
-export const wrapRootElement = ({ element }) => {
-  return <ThemeProvider>{element}</ThemeProvider>;
-};
+export const wrapRootElement = ({ element }) => <ThemeProvider>{element}</ThemeProvider>;
 
 // You can delete this file if you're not using it

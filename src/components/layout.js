@@ -4,8 +4,6 @@ import styled, { ThemeProvider } from 'styled-components';
 import { Head, Loader, Nav, Social, Email, Footer } from '@components';
 import { GlobalStyle, theme } from '@styles';
 import Spotlight from './Spotlight';
-import '../i18n';
-import { useTranslation } from 'react-i18next';
 
 const StyledContent = styled.div`
   display: flex;
@@ -16,7 +14,6 @@ const StyledContent = styled.div`
 const Layout = ({ children, location }) => {
   const isHome = location.pathname === '/';
   const [isLoading, setIsLoading] = useState(isHome);
-  const { i18n } = useTranslation();
 
   // Sets target="_blank" rel="noopener noreferrer" on external links
   const handleExternalLinks = () => {
@@ -30,15 +27,6 @@ const Layout = ({ children, location }) => {
       });
     }
   };
-
-  // Apply Vietnamese font optimization
-  useEffect(() => {
-    if (i18n.language === 'vi') {
-      document.body.classList.add('vietnamese-text');
-    } else {
-      document.body.classList.remove('vietnamese-text');
-    }
-  }, [i18n.language]);
 
   useEffect(() => {
     if (isLoading) {
