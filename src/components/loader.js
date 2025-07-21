@@ -34,9 +34,9 @@ const Loader = ({ finishLoading }) => {
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 99,
+        padding: '0 16px', // Responsive padding cho mobile
       }}>
       <Helmet bodyAttributes={{ class: `hidden` }} />
-
       {/* Container cho logo và text */}
       <div
         style={{
@@ -44,6 +44,7 @@ const Loader = ({ finishLoading }) => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          minWidth: 0, // Cho phép co lại trên mobile
         }}>
         {/* Logo */}
         <img
@@ -51,17 +52,17 @@ const Loader = ({ finishLoading }) => {
           alt="Logo"
           aria-label="Portfolio Logo"
           style={{
-            width: 100,
-            height: 100,
+            width: 'clamp(56px, 18vw, 100px)', // Responsive logo
+            height: 'auto',
             display: 'block',
             transform: `
               translateY(${stage === 0 ? '-100vh' : '0'}) 
               translateX(${stage >= 2 ? '-120px' : '0'})
             `,
             transition: 'transform 0.7s cubic-bezier(0.645,0.045,0.355,1)',
+            maxWidth: '100vw',
           }}
         />
-
         {/* Text "Hoàng Nguyên" */}
         <span
           style={{
@@ -71,15 +72,15 @@ const Loader = ({ finishLoading }) => {
             transform: 'translateY(-50%)',
             fontFamily: 'var(--font-mono)',
             fontWeight: 'bold',
-            fontSize: '2rem',
+            fontSize: 'clamp(1.25rem, 5vw, 2.5rem)', // Responsive font size
             color: 'var(--green)',
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             pointerEvents: 'none',
             userSelect: 'none',
-            marginLeft: '8px',
+            marginLeft: 'clamp(8px, 2vw, 24px)', // Responsive margin
             opacity: stage >= 3 ? 1 : 0,
-            maxWidth: stage >= 3 ? '400px' : '0',
+            maxWidth: stage >= 3 ? '80vw' : '0', // Responsive max width
             transition: 'opacity 0.7s ease-out, max-width 0.7s ease-out',
           }}
           aria-label="Hoàng Nguyên">
