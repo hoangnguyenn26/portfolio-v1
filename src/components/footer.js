@@ -149,7 +149,7 @@ const Footer = () => {
           </li>
           <li>
             <a href="https://www.linkedin.com/in/hoang-nguyenn/" aria-label="LinkedIn">
-              <Icon name="LinkedIn" />
+              <Icon name="Linkedin" />
             </a>
           </li>
         </ul>
