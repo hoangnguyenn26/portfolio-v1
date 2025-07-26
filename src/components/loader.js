@@ -45,6 +45,7 @@ const Loader = ({ finishLoading }) => {
           alignItems: 'center',
           justifyContent: 'center',
           minWidth: 0, // Cho phép co lại trên mobile
+          transform: 'translateX(-40px)',
         }}>
         {/* Logo */}
         <img
@@ -57,7 +58,7 @@ const Loader = ({ finishLoading }) => {
             display: 'block',
             transform: `
               translateY(${stage === 0 ? '-100vh' : '0'}) 
-              translateX(${stage >= 2 ? '-120px' : '0'})
+              translateX(${stage >= 2 ? '-60px' : '0'})
             `,
             transition: 'transform 0.7s cubic-bezier(0.645,0.045,0.355,1)',
             maxWidth: '100vw',
